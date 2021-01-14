@@ -1,0 +1,28 @@
+- hosts: server1
+  become: true
+  gather_facts: true
+  tasks:
+    - name: install nginx
+      yum:
+        name: nginx
+        state: latest
+    - name: copy html file to nginx server
+      copy:
+        src: ~/Documents/index.html
+        dest: /usr/share/nginx/html/
+    - name: start nginx
+      service:
+        name: nginx
+        state: started
+    - name: permanently enable http/https firewall rule 
+      firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+      with_items:
+        - http
+        - https
+    - name: reload firewalld
+      systemd:
+        name: firewalld
+        state: reloaded
