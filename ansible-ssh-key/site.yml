@@ -1,0 +1,10 @@
+---
+- hosts: server1
+  become: true
+  gather_facts: true
+  tasks:
+    - name: copy ssh key to server
+      authorized_key:
+        user: joshua
+        state: present
+        key: "{{ lookup('file', '/home/joshua/.ssh/id_rsa.pub') }}"
