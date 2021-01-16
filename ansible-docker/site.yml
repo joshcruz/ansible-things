@@ -1,0 +1,23 @@
+---
+- hosts: server1
+  become: true
+  gather_facts: true
+  tasks:
+    - name: create docker repo
+      yum_repository:
+        name: docker-ce
+        description: repo for docker
+        baseurl: https://download.docker.com/linux/centos/8/x86_64/stable/
+        gpgcheck: false
+    - name: install docker-ce
+      package:
+        name: docker-ce
+        state: present
+    - name: start docker
+      service:
+        name: docker
+        state: started
+    - name: give user docker group
+      user:
+        name: "{{ ansible_user }}"
+        group: docker
