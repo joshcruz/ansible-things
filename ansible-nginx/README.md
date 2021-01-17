@@ -1,6 +1,6 @@
 # ansible-nginx
 
-This project example installs nginx as a web server and copies a local hello world html file to the nginx html folder. We then set a firewall rule to peranently enable ports 80(http) and 443(https).
+This project example installs nginx as a web server and copies a local hello world html file to the nginx html folder. We then set a firewall rule to permanently enable ports 80(http) and 443(https).
 
 ## Configure files
 
