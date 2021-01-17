@@ -1,0 +1,23 @@
+---
+- hosts: centos
+  become: true
+  gather_facts: false
+  tasks:
+    - name: update system
+      yum:
+        name: "*"
+        update_cache: true
+        state: latest
+    - name: install packages
+      yum:
+        name:
+          - vim
+          - wget
+          - net-tools
+          - yum-utils
+          - bind-utils
+    - name: copy ssh key over to server
+      authorized_key:
+        user: joshua
+        state: present
+        key: "{{ lookup('file', '/home/joshua/.ssh/id_rsa.pub') }}"
