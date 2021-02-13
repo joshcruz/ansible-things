@@ -1,0 +1,51 @@
+---
+- hosts: server1
+  become: true
+  vars:
+    - wordpress_database: wordpress
+  tasks:
+    - name: mysqldump {{ wordpress_database }} database
+      mysql_db:
+        login_user: root
+        login_password: root
+        state: dump
+        name: "{{ wordpress_database }}"
+        target: /tmp/{{ wordpress_database }}-{{ lookup('pipe','date +%Y-%m-%d') }}.sql
+    - name: tarball {{ wordpress_database }} database
+      archive:
+        path: /tmp/{{ wordpress_database }}-{{ lookup('pipe','date +%Y-%m-%d') }}.sql
+        dest: /tmp/{{ wordpress_database }}-{{ lookup('pipe','date +%Y-%m-%d') }}.tar
+        force_archive: true
+    - name: Backup WordPress root folder
+      archive:
+        path: /var/www/wordpress
+        dest: /tmp/root_wordpress-{{ lookup('pipe','date +%Y-%m-%d') }}.tar
+    - name: Change ownership/group of WordPress root folder
+      file:
+        path: /var/www/wordpress
+        owner: apache
+        group: apache
+        recurse: true
+        state: directory
+    - name: Prepping for update (copying wp-contents folder)
+      copy:
+        src: /var/www/wordpress/wp-content
+        dest: /tmp/wp-content
+        remote_src: true
+    - name: Update WordPress to latest version
+      unarchive:
+        src: https://wordpress.org/latest.tar.gz
+        dest: /var/www/
+        remote_src: true
+    - name: Put back wp-contents folder
+      copy:
+        src: /tmp/wp-content
+        dest: /var/www/wordpress/
+        remote_src: true
+    - name: Changing ownership/group back to root
+      file:
+        path: /var/www/wordpress
+        owner: root
+        group: root
+        recurse: true
+        state: directory
