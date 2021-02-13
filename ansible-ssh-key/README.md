@@ -9,5 +9,5 @@ Before running the playbook, change the IP address of `server1` in the `hosts` f
 ## Run the Ansible playbook
 
 ```
-ansible-playbook site.yml -i hosts --ask-pass -ask-become-pass
+ansible-playbook site.yml -i hosts --ask-pass --ask-become-pass
 ```
