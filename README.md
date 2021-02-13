@@ -8,3 +8,4 @@ ansible-things contains an ongoing list of examples for provisioning, configurin
 - [`ansible-ssh-key`](ansible-ssh-key/): Copy ssh key to server.
 - [`ansible-docker`](ansible-docker/): Install docker.
 - [`ansible-initial-setup`](ansible-initial-setup/): Initial configuration for a new server.
+- [`ansible-wordpress`](ansible-wordpress/): Update WordPress.
